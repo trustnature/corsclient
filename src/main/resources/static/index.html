@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="jquery-1.10.2.min.js"></script>
+</head>
+<body>
+	<a href="#" onclick="get1()">发出ajax请求</a>
+	<br/>
+	<a href="#" onclick="get2()">发出ajax JSONP请求</a>
+	<br/>
+	<a href="#" onclick="get3()">发出ajax POST请求</a>
+	<br/>
+	<a href="#" onclick="get4()">发出ajax cookie请求</a>
+	<br/>
+	<a href="#" onclick="get5()">发出ajax 自定义头请求</a>
+	
+	<script>
+	function get1(){
+		$.getJSON("http://localhost:8080/test/get1").then(
+				function(result){
+					console.log(result);
+				}
+		);
+	}
+	
+	function get2(){
+		$.ajax({
+			url: "http://localhost:8080/test/" +"/get1",
+			dataType: "jsonp",
+			jsonp: "callback2",
+			cache:true,
+			success: function(json){
+				console.log(json);
+			}
+		});
+	}
+	
+	function get3(){
+		var result;
+		$.ajax({
+			type : "post",
+			url: "http://localhost:8080/test" + "/postJson",
+			contentType : "application/json;charset=utf-8",
+			data: JSON.stringify({name: "xiaofengqing"}),
+			success: function(json){
+				console.log(json);
+			}
+		});
+	}
+	
+	function get4(){
+		var result;
+		$.ajax({
+			type : "get",
+			url: "http://localhost:8080/test" + "/getCookie",
+			xhrFields:{
+				withCredentials:true
+			},
+			success: function(json){
+				result = json;
+			}
+		});
+	}
+	
+	function get5(){
+		var result;
+		$.ajax({
+			type : "get",
+			url: "http://localhost:8080/test" + "/getHeader",
+			headers:{
+				"x-header1" : "AAA"
+			},
+			beforeSend: function(xhr){
+				xhr.setRequestHeader("x-header2","BBB")
+			},
+			success: function(json){
+				result = json;
+			}
+		});
+
+	}
+	</script>
+</body>
+</html>
